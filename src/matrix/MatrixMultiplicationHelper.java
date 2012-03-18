@@ -9,7 +9,7 @@ public class MatrixMultiplicationHelper {
 
     private double[][] a;
     private double[][] b;
-    private double[][] temp;
+    private double[][] result;
 
     /**
      * Luo uuden matriisikertolaskijaolion.
@@ -38,11 +38,11 @@ public class MatrixMultiplicationHelper {
 
         this.a = a;
         this.b = b;
-        this.temp = new double[a.length][b.length];
+        this.result = new double[a.length][b.length];
 
         MatrixMultiplicationThread[] threads = new MatrixMultiplicationThread[threadCount];
        
-        float div = (float) temp.length / threadCount;
+        float div = (float) result.length / threadCount;
         
         for(int i = 0; i < threads.length; i++) {
             int min = Math.round(div * i);
@@ -56,7 +56,7 @@ public class MatrixMultiplicationHelper {
             threads[i].join();
         }
 
-        return this.temp;
+        return this.result;
     }
 
     class MatrixMultiplicationThread extends Thread {
@@ -84,14 +84,14 @@ public class MatrixMultiplicationHelper {
             // oikean alkion.
 
             for (int i = min; i < max; i++) {
-                for (int j = 0; j < temp[i].length; j++) {
+                for (int j = 0; j < result[i].length; j++) {
 
                     // Lasketaan tulosmatriisin alkion i,j arvo matriisitulon
                     // määritelmän mukaisesti
-                    temp[i][j] = 0;
+                    result[i][j] = 0;
 
                     for (int k = 0; k < a[0].length; k++) {
-                        temp[i][j] += a[i][k] * b[k][j];
+                        result[i][j] += a[i][k] * b[k][j];
                     }
                 }
             }
