@@ -24,9 +24,10 @@ public class Matrix {
                        {5, 0, 5}};
         
         try {
-            mmh.multiply(a, b);
+            mmh.multiply(a, b, 2);
         } catch(Exception ex) {
             System.out.println("oho");
         }
+        
     }
 }

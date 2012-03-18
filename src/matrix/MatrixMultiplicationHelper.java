@@ -7,26 +7,14 @@ package matrix;
  */
 public class MatrixMultiplicationHelper {
 
-    private int threadCount;
     private double[][] a;
     private double[][] b;
     private double[][] temp;
 
     /**
-     * Luo uuden matriisikertolaskijaolion, joka käyttää yhtä säiettä.
+     * Luo uuden matriisikertolaskijaolion.
      */
     public MatrixMultiplicationHelper() {
-        this.threadCount = 1;
-    }
-
-    /**
-     * Luo uuden matriisikertolaskijaolion, joka käyttää korkeintaan annettua
-     * määrää säikeitä.
-     *
-     * @param threadCount Käytettävien säikeiden määrä.
-     */
-    public MatrixMultiplicationHelper(int threadCount) {
-        this.threadCount = threadCount;
     }
 
     /**
@@ -34,10 +22,11 @@ public class MatrixMultiplicationHelper {
      *
      * @param a m x n -matriisi.
      * @param b n x p -matriisi.
+     * @param threadCount Käytettävien laskusäikeiden määrän yläraja.
      * @return Tulo, m x p -matriisi AB.
      * @throws Exception
      */
-    public double[][] multiply(double[][] a, double[][] b) throws Exception {
+    public double[][] multiply(double[][] a, double[][] b, int threadCount) throws Exception {
 
         if (a == null || b == null || a[0] == null || b[0] == null) {
             throw new Exception("Kaksi matriisia on annettava parametreina.");
@@ -46,22 +35,26 @@ public class MatrixMultiplicationHelper {
         if (a[0].length != b.length) {
             throw new Exception("Parametrien tuloa ei ole määritelty.");
         }
-        
+
         this.a = a;
         this.b = b;
+        this.temp = new double[a.length][b.length];
 
-        int m = a.length;
-        int n = a[0].length;
-        int p = b.length;
-
-        this.temp = new double[m][p];
+        MatrixMultiplicationThread[] threads = new MatrixMultiplicationThread[threadCount];
+       
+        float div = (float) temp.length / threadCount;
         
-        MatrixMultiplicationThread laskia1 = new MatrixMultiplicationThread(0, 2);
-        MatrixMultiplicationThread laskia2 = new MatrixMultiplicationThread(2, 3);
-        laskia1.start();
-        laskia2.start();
-        laskia1.join();
-        laskia2.join();
+        for(int i = 0; i < threadCount; i++) {
+            int min = Math.round(div * i);
+            int max = Math.round(div * (i + 1));
+            threads[i] = new MatrixMultiplicationThread(min, max);
+            threads[i].start();
+        }
+
+        // Odotellaan kaikkien säikeiden valmistuminen
+        for (int i = 0; i < threadCount; i++) {
+            threads[i].join();
+        }
 
         return this.temp;
     }
@@ -97,7 +90,7 @@ public class MatrixMultiplicationHelper {
                     // Lasketaan tulosmatriisin alkion i,j arvo matriisitulon
                     // määritelmän mukaisesti
                     temp[i][j] = 0;
-                    
+
                     for (int k = 0; k < a[0].length; k++) {
                         temp[i][j] += a[i][k] * b[k][j];
                     }

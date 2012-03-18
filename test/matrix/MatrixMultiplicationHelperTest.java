@@ -56,7 +56,7 @@ public class MatrixMultiplicationHelperTest {
                                {61, 53, 156}};        
         
         MatrixMultiplicationHelper instance = new MatrixMultiplicationHelper();
-        double[][] result = instance.multiply(a, b);
+        double[][] result = instance.multiply(a, b, 2);
         assertArrayEquals(expResult, result);
     }
 }
