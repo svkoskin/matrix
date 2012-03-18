@@ -44,7 +44,7 @@ public class MatrixMultiplicationHelper {
        
         float div = (float) temp.length / threadCount;
         
-        for(int i = 0; i < threadCount; i++) {
+        for(int i = 0; i < threads.length; i++) {
             int min = Math.round(div * i);
             int max = Math.round(div * (i + 1));
             threads[i] = new MatrixMultiplicationThread(min, max);
@@ -52,7 +52,7 @@ public class MatrixMultiplicationHelper {
         }
 
         // Odotellaan kaikkien säikeiden valmistuminen
-        for (int i = 0; i < threadCount; i++) {
+        for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
 
@@ -73,7 +73,6 @@ public class MatrixMultiplicationHelper {
         MatrixMultiplicationThread(int min, int max) {
             this.min = min;
             this.max = max;
-            System.out.println("Konstruktori");
         }
 
         @Override
