@@ -5,7 +5,7 @@ package matrix;
  * @author svkoskin
  */
 public class Matrix {
-
+    
     /**
      * @param args the command line arguments
      */
