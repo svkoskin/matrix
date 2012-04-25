@@ -16,7 +16,7 @@ public class Tiedosto {
      * [ d e f ] -> [ d e f ]
      * [ g h i ]    [ g h i ]
      */
-    public static double[][] parseMatrixAFromFile(String path) throws Exception {
+    public static double[][] parseMatrixFromFile(String path) throws Exception {
 
         double[][] matrix;
         int koko;
@@ -40,7 +40,7 @@ public class Tiedosto {
      * [ d e f ] -> [ b e h ]
      * [ g h i ]    [ c f i ]
      */
-    public static double[][] parseMatrixBFromFile(String path) throws Exception {
+    public static double[][] parseTransposedMatrixFromFile(String path) throws Exception {
 
         double[][] matrix;
         int koko;

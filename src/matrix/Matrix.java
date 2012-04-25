@@ -36,8 +36,8 @@ public class Matrix {
             }
 
             try {
-                a = Tiedosto.parseMatrixAFromFile(pathA);
-                b = Tiedosto.parseMatrixBFromFile(pathB);
+                a = Tiedosto.parseMatrixFromFile(pathA);
+                b = Tiedosto.parseTransposedMatrixFromFile(pathB);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -51,6 +51,8 @@ public class Matrix {
 
                 loppuAika = System.currentTimeMillis();
 
+                // Mikäli käyttäjä on niin komentorivillä vaatinut, tulostetaan
+                // tulosmatriisi.
                 if (verboseOutput) {
                     for (double[] col : result) {
                         for (double d : col) {

@@ -16,12 +16,24 @@ public class MatrixMultiplicationHelper {
      */
     public MatrixMultiplicationHelper() {
     }
+    
+    public double[][] transpose(double[][] matrix) {
+        double[][] transposed = new double[matrix.length][matrix[0].length];
+        
+        for(int i=0; i < matrix.length; i++) {
+            for(int j=0; j < matrix[0].length; j++) {
+                transposed[j][i] = matrix[i][j];
+            }
+        }
+        
+        return transposed;
+    }
 
     /**
      * Matriisikertolaskun toteuttava metodi.
      *
      * @param a m x n -matriisi.
-     * @param b n x p -matriisi.
+     * @param b n x p -matriisi transponoituna.
      * @param threadCount Käytettävien laskusäikeiden määrän yläraja.
      * @return Tulo, m x p -matriisi AB.
      * @throws Exception
@@ -65,6 +77,7 @@ public class MatrixMultiplicationHelper {
          * Ensimmäinen rivi, jonka laskemisesta säie on vastuussa.
          */
         private int min;
+        
         /**
          * Ensimmäinen rivi, jonka laskemisesta säie EI OLE vastuussa.
          */
@@ -83,38 +96,21 @@ public class MatrixMultiplicationHelper {
             // Käy läpi tulosmatriisin rivit [min, max[ ja kirjoittaa niihin
             // oikean alkion.
 
-//            System.out.println("A:");
-//            for (int i = 0; i < a.length; i++) {
-//                for (int j = 0; j < a.length; j++) {
-//                    System.out.print(a[i][j] + " ");
-//                }
-//                System.out.println("");
-//            }
-//
-//            System.out.println("B:");
-//            for (int i = 0; i < b.length; i++) {
-//                for (int j = 0; j < b.length; j++) {
-//                    System.out.print(b[i][j] + " ");
-//                }
-//                System.out.println("");
-//            }
-
             for (int i = min; i < max; i++) {
                 for (int j = 0; j < result[i].length; j++) {
 
-                    //// Lasketaan tulosmatriisin alkion i,j arvo matriisitulon
-                    //// määritelmän mukaisesti
 
                     // Lasketaan tulosmatriisin alkion i,j huomioiden, että
-                    // matriisi B on tallennettu "hassusti"
+                    // matriisi B on tallennettu rivit ja sarakkeet vaihtaen
+                    // välimuistin käytön tehostamiseksi
 
                     /*
-                     * aiemmin:
+                     * perinteisesti:
                      * [ 1 2 3 ]   [ a b c ]   [ 1a+2d+3g 1b+2e+3h 1c+2f+3i ]
                      * [ 4 5 6 ] * [ d e f ] = [ 4a+5d+6g 4b+5e+6h 4c+5f+6i ]
                      * [ 7 8 9 ]   [ g h i ]   [ 7a+8d+9g 7b+8e+9h 7c+8f+9i ]
                      *
-                     * nyt:
+                     * transponoidun B-matriisin tapaus, jota koodissa käytetään:
                      * [ 1 2 3 ]   [ a d g ]   [ 1a+2d+3g 1b+2e+3h 1c+2f+3i ]
                      * [ 4 5 6 ] * [ b e h ] = [ 4a+5d+6g 4b+5e+6h 4c+5f+6i ]
                      * [ 7 8 9 ]   [ c f i ]   [ 7a+8d+9g 7b+8e+9h 7c+8f+9i ]
@@ -123,10 +119,6 @@ public class MatrixMultiplicationHelper {
                     result[i][j] = 0;
 
                     for (int k = 0; k < a[0].length; k++) {
-                        //System.out.print("i:" + i + " j: " + j); // debug
-                        // System.out.println(" - " + a[i][k] + " * " + b[k][j]); // debug
-                        //result[i][j] += a[i][k] * b[k][j];
-                        // System.out.println(" - " + a[i][k] + " * " + b[j][k]); // debug
                         result[i][j] += a[i][k] * b[j][k];
                     }
                 }

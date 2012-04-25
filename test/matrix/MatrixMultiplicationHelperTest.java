@@ -15,25 +15,38 @@ public class MatrixMultiplicationHelperTest {
 
     private float[][] x;
     private float[][] y;
+    
+    private MatrixMultiplicationHelper helper;
 
     public MatrixMultiplicationHelperTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
+        this.helper = new MatrixMultiplicationHelper();
     }
 
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void testTranspose() {
+        
+        System.out.println("transpose");
+        
+        double[][] matrix = {{1, 2, 3},
+                             {4, 5, 6},
+                             {7, 8, 9}};
+        
+        double[][] expResult = {{1, 4, 7},
+                               {2, 5, 8},
+                               {3, 6, 9}};        
+    
+        assertArrayEquals(expResult, helper.transpose(matrix));
+        
+    }
+    
 
     /**
      * Test of multiply method, of class MatrixMultiplicationHelper.
@@ -51,12 +64,13 @@ public class MatrixMultiplicationHelperTest {
                        {2, 4, 6},
                        {5, 0, 5}};
         
+        double[][] bTransposed = helper.transpose(b);
+        
         double[][] expResult = {{19, 11, 36},
                                {40, 32, 96},
                                {61, 53, 156}};        
         
-        MatrixMultiplicationHelper instance = new MatrixMultiplicationHelper();
-        double[][] result = instance.multiply(a, b, 4);
+        double[][] result = helper.multiply(a, bTransposed, 4);
         assertArrayEquals(expResult, result);
     }
 }
